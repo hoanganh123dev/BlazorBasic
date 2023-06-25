@@ -10,9 +10,12 @@ namespace BlazorAPI.Repositories
         Task<IEnumerable<Task>> GetTaskList();
 
         Task<Task> Create(Task task);
-        Task<Task> Update(Guid Id,Task task);
+
+        Task<Task> Update(Task task);
+
         Task<Task> Delete(Task task);
-        Task<Task> GetById(Guid Id);
+
+        Task<Task> GetById(Guid id);
 
     }
 }

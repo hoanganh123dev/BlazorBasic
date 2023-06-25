@@ -1,5 +1,5 @@
 ﻿using BlazorAPI.Entities;
-using BlazorAPI.Enums;
+using BlazorModel.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;

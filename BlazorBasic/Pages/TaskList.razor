@@ -1,0 +1,51 @@
+﻿@page "/TaskList"
+@using BlazorBasic.Components;
+<h3>Task List </h3>
+
+@if(Tasks == null)
+{
+    <LoadingIndicator></LoadingIndicator>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Priority
+                </th>
+                <th>
+                    Assinee
+                </th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Status
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Tasks)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Priority</td>
+                    <td>@item.AssigneeName</td>
+                    <td>@item.CreatedDate</td>
+                    <td>@item.Status</td>
+                    <td>
+                        <a href="/TaskDetails/@item.Id">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+

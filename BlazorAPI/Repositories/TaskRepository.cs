@@ -37,10 +37,11 @@ namespace BlazorAPI.Repositories
 
         public async Task<IEnumerable<Task>> GetTaskList()
         {
-            return await _context.Tasks.ToListAsync();
+            return await _context.Tasks.Include(x =>x.Assignee)
+                .ToListAsync();
         }
 
-        public async Task<Task> Update(Guid Id, Task task)
+        public async Task<Task> Update( Task task)
         {
             _context.Tasks.Update(task);
             await _context.SaveChangesAsync();
