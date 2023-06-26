@@ -2,6 +2,7 @@
 using BlazorModel;
 using BlazorModel.Enums;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -20,14 +21,13 @@ namespace BlazorBasic.Pages
         private List<AssigneeDto> Assignees;
         protected override async Task OnInitializedAsync()
         {
-            Tasks = await taskApiClient.GetTaskList();
+            Tasks = await taskApiClient.GetTaskList(TaskListSearch);
             Assignees = await userApiClient.GetAssignees();
         }
+        private async Task SearchForm(EditContext context)
+        {
+            Tasks = await taskApiClient.GetTaskList(TaskListSearch);
+        }
     }
-    public class TaskListSearch
-    {
-        public string Name { get; set; }
-        public Guid AssigneeId { get; set; }
-        public Priority Priority { get; set; }
-    }
+    
 }

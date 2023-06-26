@@ -6,7 +6,7 @@ namespace BlazorBasic.Services
 {
     public interface ITaskApiClient
     {
-        Task<List<TaskDto>> GetTaskList();
+        Task<List<TaskDto>> GetTaskList(TaskListSearch taskListSearch);
         Task<TaskDto> GetTaskDetail(string id);
     }
 }

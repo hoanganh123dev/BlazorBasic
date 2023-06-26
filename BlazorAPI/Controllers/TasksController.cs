@@ -20,9 +20,9 @@ namespace BlazorAPI.Controllers
         }
         //api/tasks
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] TaskListSearch taskListSearch)
         {
-            var tasks =  await _taskRepository.GetTaskList();
+            var tasks =  await _taskRepository.GetTaskList(taskListSearch);
             var taskDtos = tasks.Select(x => new TaskDto()
             {
                 Status = x.Status,
