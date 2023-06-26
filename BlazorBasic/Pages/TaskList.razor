@@ -39,6 +39,9 @@ else
                 <div class="col pt-4">
                     <button type="submit" class="btn btn-success">Search</button>
                 </div>
+                <div class="col pt-4">
+                    <a href="/taskCreate" class="btn btn-success">Create</a>
+                </div>
             </div>
         </EditForm>
     </div>
@@ -70,10 +73,10 @@ else
                 {
                     <tr>
                         <td>@item.Name</td>
-                        <td>@item.Priority</td>
+                        <td><PriorityLabel Priority="item.Priority"></PriorityLabel></td>
                         <td>@item.AssigneeName</td>
                         <td>@item.CreatedDate</td>
-                        <td>@item.Status</td>
+                        <td><StatusLabel Status="item.Status"></StatusLabel></td>
                         <td>
                             <a href="/TaskDetails/@item.Id">Details</a>
                         </td>
