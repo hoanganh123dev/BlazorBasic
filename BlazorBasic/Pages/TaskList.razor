@@ -1,7 +1,9 @@
 ﻿@page "/TaskList"
 @using BlazorBasic.Components;
 @using BlazorModel.Enums;
+@inject IConfiguration Configuration
 <h3>Task List </h3>
+
 
 @if(Tasks == null || Assignees == null)
 {
@@ -75,10 +77,11 @@ else
                         <td>@item.Name</td>
                         <td><PriorityLabel Priority="item.Priority"></PriorityLabel></td>
                         <td>@item.AssigneeName</td>
-                        <td>@item.CreatedDate</td>
+                        <td>@item.CreatedDate.ToString(Configuration["DateTimeFormat"])</td>
                         <td><StatusLabel Status="item.Status"></StatusLabel></td>
                         <td>
                             <a href="/TaskDetails/@item.Id">Details</a>
+                            <a href="/taskEdit/@item.Id" class="btn btn-warning">Edit</a>
                         </td>
                     </tr>
                 }

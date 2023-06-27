@@ -1,4 +1,5 @@
 ﻿using BlazorModel;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -30,6 +31,13 @@ namespace BlazorBasic.Services
         public async Task<bool> CreateTask(TaskCreateRequest request)
         {
             var result = await _httpClient.PostAsJsonAsync("/api/tasks", request);
+            return result.IsSuccessStatusCode;
+
+        }
+
+        public async Task<bool> UpdateTask(Guid id, TaskUpdateRequest request)
+        {
+            var result = await _httpClient.PutAsJsonAsync($"/api/tasks/{id}", request);
             return result.IsSuccessStatusCode;
 
         }
