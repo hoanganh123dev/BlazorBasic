@@ -1,4 +1,6 @@
-﻿using BlazorBasic.Services;
+﻿using BlazorBasic.Components;
+using BlazorBasic.Pages.Components;
+using BlazorBasic.Services;
 using BlazorModel;
 using BlazorModel.Enums;
 using Microsoft.AspNetCore.Components;
@@ -13,20 +15,48 @@ namespace BlazorBasic.Pages
     public partial class TaskList
     {
         [Inject] private ITaskApiClient taskApiClient { get; set; }
-        [Inject] private IUserApiClient userApiClient { get; set; }
+        protected Confirmation DeleteConfirmation { set; get; }
+        protected AssignTask AssignTaskDialog { set; get; }
+        private Guid DeleteId { set; get; }
 
         private TaskListSearch TaskListSearch = new TaskListSearch();
 
         private List<TaskDto> Tasks;
-        private List<AssigneeDto> Assignees;
         protected override async Task OnInitializedAsync()
         {
             Tasks = await taskApiClient.GetTaskList(TaskListSearch);
-            Assignees = await userApiClient.GetAssignees();
         }
-        private async Task SearchForm(EditContext context)
+
+        public async Task SearchTask(TaskListSearch taskListSearch)
         {
+            TaskListSearch = taskListSearch;
             Tasks = await taskApiClient.GetTaskList(TaskListSearch);
+        }
+        public void OnDeleteTask(Guid deleteId)
+        {
+            DeleteId = deleteId;
+            DeleteConfirmation.Show();
+        }
+
+        public async Task OnConfirmDeleteTask(bool deleteConfirmed)
+        {
+            if (deleteConfirmed)
+            {
+                await taskApiClient.DeleteTask(DeleteId);
+                Tasks = await taskApiClient.GetTaskList(TaskListSearch);
+
+            }
+        }
+        public void OpenAssignPopup(Guid id)
+        {
+            AssignTaskDialog.Show(id);
+        }
+        public async Task AssignTaskSuccess(bool result)
+        {
+            if (result)
+            {
+                Tasks = await taskApiClient.GetTaskList(TaskListSearch);
+            }
         }
     }
     

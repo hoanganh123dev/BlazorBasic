@@ -20,7 +20,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "BlazorAPI": {
+    "TodoList.Api": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": false,

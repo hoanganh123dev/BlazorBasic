@@ -1,4 +1,5 @@
-﻿using BlazorAPI.Repositories;
+﻿using BlazorAPI.Entities;
+using BlazorAPI.Repositories;
 using BlazorModel;
 using BlazorModel.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -89,6 +90,52 @@ namespace BlazorAPI.Controllers
                 AssigneeId = taskResult.AssigneeId,
                 Priority = taskResult.Priority,
                 CreatedDate = taskResult.CreatedDate
+            });
+        }
+        [HttpPut]
+        [Route("{id}/assign")]
+        public async Task<IActionResult> AssignTask(Guid id, [FromBody] AssignTaskRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var taskFromDb = await _taskRepository.GetById(id);
+
+            if (taskFromDb == null)
+            {
+                return NotFound($"{id} is not found");
+            }
+
+            taskFromDb.AssigneeId = request.UserId.Value == Guid.Empty ? null : request.UserId.Value;
+
+            var taskResult = await _taskRepository.Update(taskFromDb);
+
+            return Ok(new TaskDto()
+            {
+                Name = taskResult.Name,
+                Status = taskResult.Status,
+                Id = taskResult.Id,
+                AssigneeId = taskResult.AssigneeId,
+                Priority = taskResult.Priority,
+                CreatedDate = taskResult.CreatedDate
+            });
+        }
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var task = await _taskRepository.GetById(id);
+            if (task == null) return NotFound($"{id} is not found");
+
+            await _taskRepository.Delete(task);
+            return Ok(new TaskDto()
+            {
+                Name = task.Name,
+                Status = task.Status,
+                Id = task.Id,
+                AssigneeId = task.AssigneeId,
+                Priority = task.Priority,
+                CreatedDate = task.CreatedDate
             });
         }
     }
