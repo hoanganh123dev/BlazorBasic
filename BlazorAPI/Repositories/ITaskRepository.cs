@@ -10,6 +10,7 @@ namespace BlazorAPI.Repositories
     public interface ITaskRepository
     {
         Task<PagedList<Task>> GetTaskList(TaskListSearch taskListSearch);
+        Task<PagedList<Task>> GetTaskListByUserId(Guid userId, TaskListSearch taskListSearch);
 
         Task<Task> Create(Task task);
 
