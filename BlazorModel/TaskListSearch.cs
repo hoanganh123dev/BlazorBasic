@@ -1,4 +1,5 @@
 ﻿using BlazorModel.Enums;
+using BlazorModel.SeedWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BlazorModel
 {
-    public class TaskListSearch
+    public class TaskListSearch : PagingParameters
     {
         public string Name { get; set; }
         public Guid? AssigneeId { get; set; }

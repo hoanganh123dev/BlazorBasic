@@ -2,6 +2,7 @@
 using BlazorAPI.Repositories;
 using BlazorModel;
 using BlazorModel.Enums;
+using BlazorModel.SeedWork;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -23,8 +24,8 @@ namespace BlazorAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] TaskListSearch taskListSearch)
         {
-            var tasks =  await _taskRepository.GetTaskList(taskListSearch);
-            var taskDtos = tasks.Select(x => new TaskDto()
+            var pagedList =  await _taskRepository.GetTaskList(taskListSearch);
+            var taskDtos = pagedList.Items.Select(x => new TaskDto()
             {
                 Status = x.Status,
                 Name = x.Name,
@@ -34,7 +35,11 @@ namespace BlazorAPI.Controllers
                 Id = x.Id,
                 AssigneeName = x.Assignee!=null? x.Assignee.FirstName + ' ' + x.Assignee.LastName : "N/A"
             });
-            return Ok(taskDtos);
+            return Ok(
+                new PagedList<TaskDto>(taskDtos.ToList(),
+                    pagedList.MetaData.TotalCount,
+                    pagedList.MetaData.CurrentPage,
+                    pagedList.MetaData.PageSize));
         }
         //api/tasks/id
         [HttpGet]

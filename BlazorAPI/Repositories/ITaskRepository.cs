@@ -1,4 +1,5 @@
 ﻿using BlazorModel;
+using BlazorModel.SeedWork;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace BlazorAPI.Repositories
 {
     public interface ITaskRepository
     {
-        Task<IEnumerable<Task>> GetTaskList(TaskListSearch taskListSearch);
+        Task<PagedList<Task>> GetTaskList(TaskListSearch taskListSearch);
 
         Task<Task> Create(Task task);
 

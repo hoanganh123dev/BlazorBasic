@@ -1,8 +1,10 @@
 ﻿using BlazorBasic.Components;
 using BlazorBasic.Pages.Components;
 using BlazorBasic.Services;
+using BlazorBasic.Shared;
 using BlazorModel;
 using BlazorModel.Enums;
+using BlazorModel.SeedWork;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using System;
@@ -22,15 +24,18 @@ namespace BlazorBasic.Pages
         private TaskListSearch TaskListSearch = new TaskListSearch();
 
         private List<TaskDto> Tasks;
+        public MetaData MetaData { get; set; } = new MetaData();
+        [CascadingParameter]
+        private Error Error { set; get; }
         protected override async Task OnInitializedAsync()
         {
-            Tasks = await taskApiClient.GetTaskList(TaskListSearch);
+            await GetTasks();
         }
 
         public async Task SearchTask(TaskListSearch taskListSearch)
         {
             TaskListSearch = taskListSearch;
-            Tasks = await taskApiClient.GetTaskList(TaskListSearch);
+            await GetTasks();
         }
         public void OnDeleteTask(Guid deleteId)
         {
@@ -43,7 +48,7 @@ namespace BlazorBasic.Pages
             if (deleteConfirmed)
             {
                 await taskApiClient.DeleteTask(DeleteId);
-                Tasks = await taskApiClient.GetTaskList(TaskListSearch);
+                await GetTasks();
 
             }
         }
@@ -55,8 +60,27 @@ namespace BlazorBasic.Pages
         {
             if (result)
             {
-                Tasks = await taskApiClient.GetTaskList(TaskListSearch);
+                await GetTasks();
             }
+        }
+        private async Task GetTasks()
+        {
+            try
+            {
+                var pagingResponse = await taskApiClient.GetTaskList(TaskListSearch);
+                Tasks = pagingResponse.Items;
+                MetaData = pagingResponse.MetaData;
+            }
+            catch (Exception ex)
+            {
+                Error.ProcessError(ex);
+            }
+
+        }
+        private async Task SelectedPage(int page)
+        {
+            TaskListSearch.PageNumber = page;
+            await GetTasks();
         }
     }
     
